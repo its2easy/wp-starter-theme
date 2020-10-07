@@ -1,14 +1,15 @@
 const path = require('path');
 const miniCss = require('mini-css-extract-plugin');
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 
 const config = {
     entry: {
-        main: [path.join(__dirname, "./src/js/index.js"), path.join(__dirname, "./src/assets/scss/app.scss")],
+        main: path.join(__dirname, "./src/js/index.js"),
+        style: path.join(__dirname, "./src/assets/scss/app.scss"),
     },
     output: {
         path: path.resolve(__dirname, './assets'),
         filename: 'js/[name].js',
-        //publicPath: 'http://sredainvest.local/',
     },
     externals: {
         jquery: 'jQuery'
@@ -25,6 +26,7 @@ const config = {
         ]
     },
     plugins: [
+        new FixStyleOnlyEntriesPlugin(),// Remove redundant js files from css entries
         new miniCss({
             filename: './css/[name].css',
         }),

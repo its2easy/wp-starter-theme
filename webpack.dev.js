@@ -2,29 +2,33 @@ const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('
 const commonConfig = require('./webpack.common.js');
 const path = require('path');
 const miniCss = require('mini-css-extract-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 let devConfig = {
     mode: 'development',
-    devtool: 'cheap-module-source-map', // eval-source-map, cheap-module-source-map
-    devServer: {
-        publicPath: '/wp-content/themes/wp-starter-theme/assets/', // на этом адресе по host + publicPath будет контент вебпака
-        contentBase: path.join(__dirname, './'),// то где лежит основной контент для обновления
-        host: 'localhost',
-        port: 3000,
-        //historyApiFallback: true,
-        open: true,
-        overlay: true,
-        watchContentBase: true,
-        disableHostCheck: true,
-        proxy: {
-            '/': {
-                target: 'http://wp-starter-theme.local/',
-                //secure: false,
-                changeOrigin: true, // не работает без этого
-                //autoRewrite: true,
+    // eval- doesn't work with mini-css-extract-plugin
+    devtool: 'cheap-module-source-map', // eval-source-map, cheap-module-source-map,
+    plugins: [
+        new BrowserSyncPlugin(
+            {
+                host: 'localhost',
+                port: 3000,
+                notify: true,
+                proxy: 'http://wp-starter-theme.local/',
+                files: [
+                    '**/*.php',
+                    'assets/js/**/*.js',
+                    'assets/css/**/*.css',
+                    '!**/*.css.map',
+                    '!**/*.js.map',
+                ],
             },
-        }
-    },
+            {
+                reload: false,
+                injectCss: true,
+            }
+        ),
+    ],
     module: {
         rules: [
             {
@@ -48,11 +52,9 @@ let devConfig = {
 
 let resultConfig = mergeWithCustomize({
     customizeArray: customizeArray({
-        'module.rules': 'append'
+        'module.rules': 'append',
+        'plugins': 'append',
     }),
-    // customizeObject: customizeObject({
-    //     entry: 'prepend'
-    // })
 })(commonConfig, devConfig);
 
 module.exports = resultConfig;

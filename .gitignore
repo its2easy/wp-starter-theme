@@ -10,3 +10,5 @@ psd/
 languages
 *.mp4
 *.webm
+assets/css/*.css.map
+assets/js/*.js.map
