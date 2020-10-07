@@ -1,0 +1,95 @@
+.theme-pagination{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    ul.page-numbers{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li{
+            &:not(:last-child){
+                margin-right: 5px;
+            }
+        }
+    }
+    // Default
+    span.page-numbers.current,
+    a.page-numbers{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        padding: 3px 3px;
+        border-radius: 10px;
+        @include media-breakpoint-only(xs) {
+            width: 26px;
+            height: 26px;
+            font-size: 13px;
+        }
+    }
+    a.page-numbers{
+        color: $text;
+        background-color: $border;
+        &:hover{
+            color: #fff;
+            background-color: $red;
+        }
+    }
+    // Current
+    span.page-numbers.current{
+        color: #fff;
+        background-color: $red;
+    }
+    // Prev, Next
+    a.page-numbers.prev, a.page-numbers.next{
+        width: auto;
+        padding: 3px 20px;
+        background-color: $border;
+        border-radius: 10px;
+        line-height: 1;
+        @include media-breakpoint-only(xs) {
+            display: none;
+        }
+        &:hover{
+            color: #fff;
+            background-color: $red;
+            svg{
+                fill: #fff;
+            }
+        }
+        svg{
+            transition: all 0.3s ease;
+            @include media-breakpoint-down(sm) {
+                display: none;
+            }
+        }
+    }
+    a.page-numbers.prev{
+        svg{
+            margin-right: 10px;
+        }
+    }
+    a.page-numbers.next{
+        svg{
+            margin-left: 10px;
+            transform: rotate(180deg);
+        }
+    }
+    // Dots
+    span.page-numbers.dots{
+        font-size: 14px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include media-breakpoint-only(xs) {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}

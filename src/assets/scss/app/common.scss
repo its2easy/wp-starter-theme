@@ -1,0 +1,130 @@
+body{
+    line-height: 1.35;
+    color: $text;
+    font-family: 'Roboto', sans-serif;// 300, 400, 500 medium, 700
+}
+
+a{
+    transition: all 0.3s ease;
+    &:hover,
+    &:focus,
+    &:active{
+        text-decoration: none;
+    }
+}
+img{
+    max-width: 100%;
+    height: auto;
+}
+h1{
+
+}
+h2, h3, h4, h5, h6{
+
+}
+h2{
+
+}
+h3{
+
+}
+h4{
+
+}
+h5{
+
+}
+h6{
+
+}
+
+p{
+    &:last-child,
+    &:last-of-type{
+
+    }
+}
+strong{
+    font-weight: bold;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+.wrap{
+
+}
+
+
+.page-wrapper{ // main content wrapper, may contain cols
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.site-main{ // main content, contains article or preview list
+
+}
+
+// content of editor area
+.html-content{
+    color: $text;
+    h1{
+    
+    }
+    h1, h2, h3, h4, h5, h6{
+    
+    }
+    ul, ol{
+    
+    }
+    li{
+    
+    }
+    p{
+        &:last-child{
+        
+        }
+    }
+    a{
+        &:hover,
+        &:focus,
+        &:active{
+        
+        }
+    }
+    img{
+    
+    }
+}
+
+.page-title{
+
+}
+
+// Extra small devices (portrait phones, less than 576px)
+@include media-breakpoint-only(xs) {
+
+}
+// Small devices (landscape phones, 576px and up)
+@include media-breakpoint-only(sm) {
+
+}
+
+// Medium devices (tablets, 768px and up)
+@include media-breakpoint-only(md) {
+
+}
+
+// Large devices (desktops, 992px and up)
+@include media-breakpoint-only(lg) {
+
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@include media-breakpoint-only(xl) {
+
+}
+// XXL 1420 and up
+@include media-breakpoint-only(xxl) {
+
+}

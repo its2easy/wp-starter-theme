@@ -1,0 +1,145 @@
+//======================= ПРОСТЫЕ ИНПУТЫ
+.theme-input {
+    @extend .form-control;
+
+}
+
+.theme-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+
+}
+.theme-input::-moz-placeholder { /* Firefox 19+ */
+
+}
+.theme-input:-ms-input-placeholder { /* IE 10+ */
+
+}
+.theme-input::-ms-input-placeholder { /*  Microsoft Edge+ */
+
+}
+.theme-input:-moz-placeholder { /* Firefox 18- */
+
+}
+.theme-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+
+}
+
+//======================= КНОПКИ
+.clear-button {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.button-base {
+    font-size: 16px;
+    font-weight: 400;
+    color: $text;
+    display: inline-block;
+    line-height: 1.1;
+    padding: 16px 30px;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    &:hover,
+    &:focus,
+    &:active {
+        outline: none;
+        color: #000;
+        text-decoration: none;
+    }
+    
+    
+}
+
+.button-primary {
+    @extend .button-base;
+    background-color: $primary;
+    color: #fff;
+    &:hover,
+    &:focus,
+    &:active {
+        color: #fff;
+        background-color: darken($primary, 7%);
+    }
+}
+
+
+//===================== SWIPER
+.swiper-arrows{
+    display: flex;
+    align-items: center;
+}
+.swiper-arrow {
+    @extend .clear-button;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $border;
+    border-radius: 50%;
+    span {
+        width: 9px;
+        height: 16px;
+        background-size: 100% 100%;
+    }
+    &.prev {
+    
+    }
+    &.next {
+        span {
+            transform: rotate(180deg);
+        }
+    }
+    &:hover {
+        background-color: $primary;
+        span {
+
+        }
+    }
+    &:focus{
+        outline: none;
+    }
+    &:not(:last-child){
+        margin-right: 10px;
+    }
+}
+.sw-pagination{
+    margin-left: 15px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    .swiper__pagination-bullet{
+        width: 16px;
+        height: 16px;
+        position: relative;
+        &:not(:last-child){
+            margin-right: 20px;
+        }
+        &:after{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            content: '';
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            background: $border;
+            box-shadow: none;
+        }
+    }
+    .swiper__pagination-bullet-active{
+        &:after{
+            width: 16px;
+            height: 16px;
+            background: $primary;
+        }
+    }
+}
+
