@@ -1,132 +1,77 @@
 'use strict';
-const plugins = require('gulp-load-plugins'),
-    yargs = require('yargs'),
-    browser = require('browser-sync'),
+const yargs = require('yargs'),
+    browserSync = require('browser-sync').create(),
     gulp = require('gulp'),
-    del = require('del'),
-    notify = require('gulp-notify'),//errors handling (mb platform specific)
-    plumber = require('gulp-plumber'),
-    postcss = require('gulp-postcss'),
+    gulpif = require('gulp-if'),
+    sourcemaps = require('gulp-sourcemaps'),
+    gulpSass = require('gulp-sass'),
+    postcss    = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
-    cssnano = require('cssnano');//errors handling
-
-// Load all Gulp plugins into one variable
-const $ = plugins();
+    cssnano = require('cssnano'),
+    packageImporter = require('node-sass-package-importer'),
+    beeper = require('beeper'),
+    rename = require("gulp-rename");
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
 
 const PATHS = {
-    delete_dist_options: [
-        "assets/css",
-    ],
-    watch_styles: "src/assets/scss/**/*.scss",
-    javascript: [
-        "src/assets/js/**/*",
-    ],
-    views: [
-        "**/*.php",
-    ]
-};
+        scss_main_file: 'src/assets/scss/app.scss',
+        watch_styles: "src/assets/scss/**/*.scss",
+        result_styles: "assets",
+    },
+    OPTIONS = {
+        port: 3000,
+        proxy: 'wp-starter-theme.local'
+    };
 
-// Build the "dist" folder by running all of the below tasks
-gulp.task('build',
-    gulp.series(clean, gulp.parallel(gulp.series(gulp.parallel(sass)), copyCss))
-);
-
-// Build the site, run the server, and watch for file changes
-gulp.task('default',
-    gulp.series('build', server, watch)
-);
-
-// Delete the "assets/css" and "assets/js" folders
-function clean(done) {
-    del(PATHS.delete_dist_options)
-        .then(function () {
-            done();
-        })
-}
-
-//copy css without build
-function copyCss() {
-    return gulp.src('src/assets/css/**/*')
-        .pipe(gulp.dest('assets/css'));
-}
-
-// Compile Sass into CSS
-// In production, the CSS is compressed
+//================ CSS
 function sass() {
-    return gulp.src('src/assets/scss/app.scss')
-        .pipe(plumber({
-            errorHandler: notify.onError(err => ({
-                title: 'SCSS ERROR!',
-                message: err.message
-            }))
-        }))
-        .pipe($.if(!PRODUCTION, $.sourcemaps.init()))
-        .pipe($.sass({})
-            .on('error', $.sass.logError))
-        // .pipe($.if(PRODUCTION, $.autoprefixer() ))
-        // .pipe($.if(PRODUCTION, $.cssnano({
-        //     safe: true
-        // })))
-        .pipe($.if(PRODUCTION, postcss(
+    return gulp.src(PATHS.scss_main_file)
+        .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
+        .pipe(gulpSass({
+            importer: packageImporter()
+        }).on('error', gulpSass.logError))
+        .on('error', (err) => {
+            beeper(1);
+        })
+        .on('data', () => { // fix missing browsersync update notifications
+            browserSync.notify("Styles updated", 2000);
+        })
+        .pipe(gulpif(PRODUCTION, postcss(
             [
                 autoprefixer(),
                 cssnano()
             ]
         )))
-        .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-        .pipe(gulp.dest('assets/css'))
+        .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
+        .pipe(rename("css/style.css"))
+        .pipe(gulp.dest(PATHS.result_styles))
+        .pipe(browserSync.stream());
 }
 
-// Combine JavaScript into one file
-// function javascript() {
-//   // return gulp.src(PATHS.javascript)
-//   //   .pipe(plumber({
-//   //     errorHandler: notify.onError(err => ({
-//   //       title: 'JS ERROR!',
-//   //       message: err.message
-//   //     }))
-//   //   }))
-//   //   .pipe($.sourcemaps.init())
-//   //   .pipe($.concat('app.js'))
-//   //   .pipe($.if(PRODUCTION, $.uglify()
-//   //     .on('error', e => { console.log(e); })
-//   //   ))
-//   //   .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
-//   //   .pipe(gulp.dest(PATHS.dist + '/assets/js'));
-//
-//     //for easier changes, just copy all files from src/js to dist/js
-//     // return gulp.src( PATHS.javascript )
-//     //     .pipe(newer('assets/js'))//filter existent files
-//     //     .pipe(gulp.dest('assets/js'));
-// }
-
-
-// Start a server with BrowserSync to preview the site in
+// Start a server with BrowserSync
 function server(done) {
-    browser.init({
-        proxy: "wp-starter-theme.local/",
-    });
-    done();
+    browserSync.init(
+        {
+            proxy: OPTIONS.proxy,
+            port: OPTIONS.port,
+        }, done);
 }
-
 // Reload the browser with BrowserSync
 function reload(done) {
-    browser.reload();
+    browserSync.reload();
     done();
 }
 
-// Watch for changes to static assets, pages, Sass, and JavaScript
-function watch(done) {
-    gulp.watch(PATHS.views).on('all', gulp.series(reload));//html
-    gulp.watch('src/assets/css/**/*', gulp.series(copyCss, reload));//css without build
-    gulp.watch(PATHS.watch_styles).on('all', gulp.series(sass, reload));//scss
-    gulp.watch('assets/js/**/*.js').on('all', gulp.series(reload));//js
-    done();
+//================
+function watch() {
+    gulp.watch(['**/*.php', '!node_modules/**'], reload);
+    gulp.watch('src/js/**/*.js', reload);
+    gulp.watch(PATHS.watch_styles, sass);
 }
 
-
-
-
+//Public tasks
+const build = gulp.series(sass);
+exports.build = build;
+exports.default = gulp.series(build, server, watch);
