@@ -1,14 +1,15 @@
 const path = require('path');
 const miniCss = require('mini-css-extract-plugin');
 const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
+const config = require('./config');
 
-const config = {
+const webpackConfig = {
     entry: {
-        main: path.join(__dirname, "./src/js/index.js"),
-        style: path.join(__dirname, "./src/assets/scss/app.scss"),
+        main: path.join(__dirname, config.jsEntryPoint),
+        style: path.join(__dirname, config.scssEntryPoint),
     },
     output: {
-        path: path.resolve(__dirname, './assets'),
+        path: path.resolve(__dirname, config.resultFolder),
         filename: 'js/[name].js',
     },
     externals: {
@@ -32,4 +33,4 @@ const config = {
         }),
     ],
 };
-module.exports = config;
+module.exports = webpackConfig;

@@ -1,6 +1,6 @@
 const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('webpack-merge');
-const commonConfig = require('./webpack.common.js');
 const miniCss = require('mini-css-extract-plugin');
+const commonConfig = require('./webpack.common.js');
 
 let prodConfig = {
     mode: 'production',
@@ -39,7 +39,6 @@ let prodConfig = {
         ]
     }
 }
-
 
 let resultConfig = mergeWithCustomize({
     customizeArray: customizeArray({

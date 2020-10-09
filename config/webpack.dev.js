@@ -1,8 +1,8 @@
 const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('webpack-merge');
 const commonConfig = require('./webpack.common.js');
-const path = require('path');
 const miniCss = require('mini-css-extract-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const config = require('./config');
 
 let devConfig = {
     mode: 'development',
@@ -11,14 +11,13 @@ let devConfig = {
     plugins: [
         new BrowserSyncPlugin(
             {
-                host: 'localhost',
-                port: 3000,
+                port: config.port,
                 notify: true,
-                proxy: 'http://wp-starter-theme.local/',
-                files: [
-                    '**/*.php',
-                    'assets/js/**/*.js',
-                    'assets/css/**/*.css',
+                proxy: config.proxy,
+                files: [ // relative to cwd, not to config
+                    `./${config.watchPhp}`,
+                    `./${config.watchJs}`,
+                    `./${config.watchCss}`,
                     '!**/*.css.map',
                     '!**/*.js.map',
                 ],

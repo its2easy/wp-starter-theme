@@ -11,23 +11,14 @@ const yargs = require('yargs'),
     packageImporter = require('node-sass-package-importer'),
     beeper = require('beeper'),
     rename = require("gulp-rename");
+const config = require('./config');
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
 
-const PATHS = {
-        scss_main_file: 'src/assets/scss/app.scss',
-        watch_styles: "src/assets/scss/**/*.scss",
-        result_styles: "assets",
-    },
-    OPTIONS = {
-        port: 3000,
-        proxy: 'wp-starter-theme.local'
-    };
-
 //================ CSS
 function sass() {
-    return gulp.src(PATHS.scss_main_file)
+    return gulp.src(config.scssEntryPoint)
         .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
         .pipe(gulpSass({
             importer: packageImporter()
@@ -46,7 +37,7 @@ function sass() {
         )))
         .pipe(gulpif(!PRODUCTION, sourcemaps.write()))
         .pipe(rename("css/style.css"))
-        .pipe(gulp.dest(PATHS.result_styles))
+        .pipe(gulp.dest(config.resultFolder))
         .pipe(browserSync.stream());
 }
 
@@ -54,8 +45,8 @@ function sass() {
 function server(done) {
     browserSync.init(
         {
-            proxy: OPTIONS.proxy,
-            port: OPTIONS.port,
+            proxy: config.proxy,
+            port: config.port,
         }, done);
 }
 // Reload the browser with BrowserSync
@@ -66,9 +57,10 @@ function reload(done) {
 
 //================
 function watch() {
-    gulp.watch(['**/*.php', '!node_modules/**'], reload);
-    gulp.watch('src/js/**/*.js', reload);
-    gulp.watch(PATHS.watch_styles, sass);
+    //paths relative to config folder
+    gulp.watch([`${config.root}${config.watchPhp}`, '!node_modules/**'], reload);
+    gulp.watch([`${config.root}${config.watchJs}`, '!**/*.js.map'], reload);
+    gulp.watch(`${config.root}${config.watchCssSrc}`, sass);
 }
 
 //Public tasks

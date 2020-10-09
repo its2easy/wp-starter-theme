@@ -2,12 +2,12 @@
   "name": "wp-starter-theme",
   "version": "1.0.0",
   "description": "Wordpress theme",
-  "main": "gulpfile.js",
+  "main": "config/gulpfile.js",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "start": "webpack --config webpack.dev.js --watch",
-    "gulp:start": "gulp",
-    "gulp:build": "gulp build --production"
+    "build": "webpack --config config/webpack.prod.js",
+    "start": "webpack --config config/webpack.dev.js --watch",
+    "gulp:start": "gulp -f config/gulpfile.js",
+    "gulp:build": "gulp build -f config/gulpfile.js --production"
   },
   "author": "Dmitriy Kovalev",
   "license": "MIT",

@@ -2,10 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 function theme_scripts() {
-
-	//get_template_directory() - /home/site.ru/public_html/wp-content/themes/theme_name
-	// get_template_directory_uri() - //localhost:3000/wp-content/themes/wp-starter-theme
-	//get_template() - wp-starter-theme
 	$version = wp_get_theme()->get( 'Version' );
 	$theme = get_template();
 	$assets_folder = 'assets';
@@ -21,7 +17,8 @@ function theme_scripts() {
 	wp_deregister_script( 'jquery' );
 	// If there is no jquery, you're gonna have problems
 	wp_enqueue_script( 'jquery', $assetPrefix . '/js/vendor/jquery/jquery-3.5.0.min.js', array(), $version, false );
-	// Old style scripts
+
+	// Old style scripts without compilation
 	wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), $version, true );
 
 	// webpack assets (name based on webpack entry points)
