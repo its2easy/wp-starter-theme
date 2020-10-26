@@ -17,17 +17,18 @@ let prodConfig = {
                     //'style-loader',
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true, url: false }
+                        options: { sourceMap: false, url: false, importLoaders: 1 }
                     },
                     {
                         loader: "postcss-loader",
                         options: {
-                            sourceMap: true,
-                            ident: 'postcss',
-                            plugins: (loader) => [
-                                require('autoprefixer')(),
-                                require('cssnano')()
-                            ]
+                            sourceMap: false,
+                            postcssOptions: {
+                                plugins: [
+                                    [ 'autoprefixer' ],
+                                    [ 'cssnano', {preset: 'default'} ]
+                                ],
+                            },
                         }
                     },
                     {
