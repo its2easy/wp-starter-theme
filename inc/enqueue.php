@@ -4,19 +4,21 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function theme_scripts() {
 	$version = wp_get_theme()->get( 'Version' );
 	$theme = get_template();
-	$assets_folder = 'assets';
+	$assets_folder = 'dist';
 	$theme_system_path = get_template_directory();
 	$cssFile = 'css/style.css';
 	$jsFile = 'js/main.js';
 
-	$assetPrefix = "/wp-content/themes/$theme/assets/";
+	$assetPrefix = "/wp-content/themes/$theme/$assets_folder/";
 	$jsFileTime = filemtime( "$theme_system_path/$assets_folder/$jsFile" );
 	$cssFileTime = filemtime( "$theme_system_path/$assets_folder/$cssFile" );
 
 	wp_enqueue_style( 'gfonts-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 	wp_deregister_script( 'jquery' );
 	// If there is no jquery, you're gonna have problems
-	wp_enqueue_script( 'jquery', $assetPrefix . '/js/vendor/jquery/jquery-3.5.0.min.js', array(), $version, false );
+	wp_enqueue_script( 'jquery', get_template_directory_uri() .
+	                             '/assets/js/vendor/jquery/jquery-3.5.0.min.js',
+		array(), $version, false );
 
 	// Old style scripts without compilation
 	wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), $version, true );

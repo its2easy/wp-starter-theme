@@ -1,4 +1,4 @@
-const root = '../';
+const root = '../'; // root of the project
 
 module.exports = {
     root: root,
@@ -6,11 +6,12 @@ module.exports = {
     scssEntryPoint: `${root}src/scss/app.scss`,
     jsEntryPoint: `${root}src/js/index.js`,
 
-    resultFolder: `${root}assets`,
+    resultFolder: `${root}dist`,
 
     watchPhp: `**/*.php`,
-    watchJs: `assets/js/**/*.js`,
-    watchCss: `assets/css/**/*.css`,
+    watchJs: `dist/js/**/*.js`,
+    watchStaticJs: `assets/js/**/*.js`,
+    watchCss: `dist/css/**/*.css`,
     watchCssSrc: `src/scss/**/*.scss`,
 
     proxy: 'wp-starter-theme.local',

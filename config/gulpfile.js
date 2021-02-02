@@ -59,7 +59,8 @@ function reload(done) {
 function watch() {
     //paths relative to config folder
     gulp.watch([`${config.root}${config.watchPhp}`, '!node_modules/**'], reload);
-    gulp.watch([`${config.root}${config.watchJs}`, '!**/*.js.map'], reload);
+    // js from src is not compiled, so only assets/js/app.js watched
+    gulp.watch([`${config.root}${config.watchStaticJs}`, '!**/*.js.map'], reload);
     gulp.watch(`${config.root}${config.watchCssSrc}`, sass);
 }
 

@@ -26,8 +26,9 @@ yargs node-sass-package-importer beeper gulp-rename --save-dev
 ```
 And optionally delete webpack packages:
 ```
-npm uninstall --save-dev babel-loader @babel/core @babel/preset-env browser-sync-webpack-plugin
-css-loader mini-css-extract-plugin postcss-loader sass-loader webpack 
+npm uninstall --save-dev babel-loader @babel/core @babel/preset-env 
+browser-sync-webpack-plugin clean-webpack-plugin css-loader 
+mini-css-extract-plugin postcss-loader sass-loader webpack 
 webpack-cli webpack-fix-style-only-entries webpack-merge postcss
 ```
 

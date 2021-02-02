@@ -6,6 +6,9 @@ const config = require('./config');
 
 let devConfig = {
     mode: 'development',
+    stats: {
+        modules: false
+    },
     // eval- doesn't work with mini-css-extract-plugin
     devtool: 'cheap-module-source-map', // eval-source-map, cheap-module-source-map,
     plugins: [
