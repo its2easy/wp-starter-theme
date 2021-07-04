@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import "bootstrap/js/dist/util";
-import "bootstrap/js/dist/modal";
+//import "bootstrap/js/dist/modal";
+import Alert from "bootstrap/js/dist/modal";
 
 document.addEventListener("DOMContentLoaded", function(event) {
 

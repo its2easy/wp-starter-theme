@@ -17,7 +17,7 @@ function theme_scripts() {
 	wp_deregister_script( 'jquery' );
 	// If there is no jquery, you're gonna have problems
 	wp_enqueue_script( 'jquery', get_template_directory_uri() .
-	                             '/assets/js/vendor/jquery/jquery-3.5.0.min.js',
+	                             '/assets/js/vendor/jquery/jquery-3.6.0.min.js',
 		array(), $version, false );
 
 	// Old style scripts without compilation

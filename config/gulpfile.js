@@ -4,7 +4,7 @@ const yargs = require('yargs'),
     gulp = require('gulp'),
     gulpif = require('gulp-if'),
     sourcemaps = require('gulp-sourcemaps'),
-    gulpSass = require('gulp-sass'),
+    gulpSass = require('gulp-sass')(require('sass')),
     postcss    = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
     cssnano = require('cssnano'),
@@ -20,7 +20,7 @@ const PRODUCTION = !!(yargs.argv.production);
 function sass() {
     return gulp.src(config.scssEntryPoint)
         .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-        .pipe(gulpSass({
+        .pipe(gulpSass.sync({
             importer: packageImporter()
         }).on('error', gulpSass.logError))
         .on('error', (err) => {

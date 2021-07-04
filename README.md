@@ -21,15 +21,11 @@ Bootstrap and swiper are already included.
 ### Gulp setup
 To use gulp install dependencies: 
 ```
-npm install gulp gulp-cli gulp-if gulp-postcss gulp-sass gulp-sourcemaps 
-yargs node-sass-package-importer beeper gulp-rename --save-dev
+npm install gulp gulp-cli gulp-if gulp-postcss gulp-sass gulp-sourcemaps yargs node-sass-package-importer beeper@2 gulp-rename --save-dev
 ```
 And optionally delete webpack packages:
 ```
-npm uninstall --save-dev babel-loader @babel/core @babel/preset-env 
-browser-sync-webpack-plugin clean-webpack-plugin css-loader 
-mini-css-extract-plugin postcss-loader sass-loader webpack 
-webpack-cli webpack-fix-style-only-entries webpack-merge postcss
+npm uninstall --save-dev babel-loader @babel/core @babel/preset-env browser-sync-webpack-plugin clean-webpack-plugin css-loader mini-css-extract-plugin postcss-loader sass-loader webpack webpack-cli webpack-fix-style-only-entries webpack-merge postcss fibers
 ```
 
 ```npm run gulp:start``` - development with livereload and scss
