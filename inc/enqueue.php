@@ -61,7 +61,7 @@ function theme_scripts() {
 	// Old style scripts without compilation
 	wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), $version, true );
 
-	// 5) Additional info
+	// 5) Additional data
 	$jsHandle = "theme-" . preg_replace($clearJsFileRE, '', $jsQueue[0]); //webpack version
 	//$jsHandle = "theme-scripts"; //gulp version
 	wp_localize_script(
@@ -79,9 +79,13 @@ function theme_deregister_wp_embed(){
 	wp_deregister_script( 'wp-embed' );
 }
 add_action( 'wp_footer', 'theme_deregister_wp_embed' );
+
 // Remove gutenberg default blocks styles
 function theme_remove_wp_block_library_css(){
-	wp_dequeue_style( 'wp-block-library' );
+	// 80kb dist/block-library/style.min.css, previously imported in vendors.scss
+	if ( !is_singular() ) { //disable if not singular
+		wp_dequeue_style( 'wp-block-library' );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'theme_remove_wp_block_library_css', 100 );
 

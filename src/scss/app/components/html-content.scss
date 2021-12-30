@@ -1,0 +1,9 @@
+// .type-post and .type-page are added by script (inc/setup.php)
+.html-content-post, .block-editor-block-list__layout.type-post{ // post editor
+    p{
+        //font-size: 18px;
+    }
+}
+.html-content-page, .block-editor-block-list__layout.type-page{ // page editor
+
+}

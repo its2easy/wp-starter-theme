@@ -1,31 +1,5 @@
 <?php
 /**
- * Functions which used in theme
- *
- */
-if ( ! defined( 'ABSPATH' ) ) exit;
-
-function theme_body_classes( $classes ) {
-	// Adds a class of hfeed to non-singular pages.
-	if ( ! is_singular() ) {
-		$classes[] = 'hfeed';
-	}
-	return $classes;
-}
-add_filter( 'body_class', 'theme_body_classes' );
-
-// Removes tag class from the body_class array to avoid Bootstrap markup styling issues.
-add_filter( 'body_class', 'theme_adjust_body_class' );
-function theme_adjust_body_class( $classes ) {
-	foreach ( $classes as $key => $value ) {
-		if ( 'tag' === $value ) {
-			unset( $classes[ $key ] );
-		}
-	}
-	return $classes;
-}
-
-/**
  * Gets full image url
  *
  * @param string $name Path relative to theme/img folder
@@ -175,57 +149,6 @@ function theme_get_the_excerpt($limit = null, $separator = null) {
 	return $excerpt;
 }
 
-
-/**
- * Returns filesize in human format and translated
- *
- * @param string $filepath full system path
- *
- * @return bool|false|string
- */
-function theme_get_filesize($filepath){
-	$bytes = filesize($filepath);
-	//$s = array('b', 'Kb', 'Mb', 'Gb');
-	//$e = floor(log($bytes)/log(1024));
-	//return sprintf('%.2f '.$s[$e], ($bytes/pow(1024, floor($e))));
-	return size_format($bytes, 2);
-}
-
-/**
- * Check if plugin is active
- *
- * <code>
- * <?php theme_is_plugin_active('plugin-name/plugin-main-file.php') ?>
- * </code>
- *
- * @param string $plugin plugin main file relative path
- *
- * @return bool
- *
- */
-function theme_is_plugin_active($plugin){
-	return in_array( $plugin, (array) get_option( 'active_plugins', array() ) );
-}
-
-
-/**
- * Returns items separated with commas
- *
- * @param array|string $arr
- *
- * @return string
- */
-function theme_get_array_output_list($arr){
-	if (!is_array($arr)) return $arr;
-	$result = '';
-	for($i=0; $i < count($arr); $i++)
-	{
-		$result .= trim( htmlspecialchars($arr[$i]));
-		if ( $i != count($arr)-1 ) $result .= ", ";
-	}
-	return $result;
-}
-
 /**
  * Returns or outputs svg inline content
  *
@@ -268,23 +191,96 @@ if ( ! function_exists('d') ) {
 }
 
 /**
- * Return an array with webpack manifest data
- * @param $path string System path to build folder
+ * Check if 'edit' or 'new-post' screen of a
+ * given post type is opened
  *
- * @return array|null
+ * @param null $post_type name of post type to compare
+ *
+ * @return bool true or false
  */
-function theme_get_webpack_manifest_data($path){
-	$webpack_manifest = file_get_contents("$path/manifest.json");
-	return json_decode($webpack_manifest, true);
+function is_edit_or_new_cpt( $post_type = null ) {
+	global $pagenow;
+
+	/**
+	 * return false if not on admin page or
+	 * post type to compare is null
+	 */
+	if ( ! is_admin() || $post_type === null ) {
+		return FALSE;
+	}
+
+	/**
+	 * if edit screen of a post type is active
+	 */
+	if ( $pagenow === 'post.php' ) {
+		// get post id, in case of view all cpt post id will be -1
+		$post_id = isset( $_GET[ 'post' ] ) ? $_GET[ 'post' ] : - 1;
+
+		// if no post id then return false
+		if ( $post_id === - 1 ) {
+			return FALSE;
+		}
+
+		// get post type from post id
+		$get_post_type = get_post_type( $post_id );
+
+		// if post type is compared return true else false
+		if ( $post_type === $get_post_type ) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	} elseif ( $pagenow === 'post-new.php' ) { // is new-post screen of a post type is active
+		// get post type from $_GET array
+		$get_post_type = isset( $_GET[ 'post_type' ] ) ? $_GET[ 'post_type' ] : '';
+		// if post type matches return true else false.
+		if ( $post_type === $get_post_type ) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	} else {
+		// return false if on any other page.
+		return FALSE;
+	}
 }
 
 /**
- * Returns file extension from any file path
- * @param string $filepath
+ * Returns inline svg for image placeholder
+ * @param int $width
+ * @param int $height
+ * @param string|null $color
  *
  * @return string
  */
-function theme_get_filename_ext($filepath){
-	$tmp = explode('.', $filepath);
-	return end($tmp);
+function get_svg_placeholder($width = 1, $height = 1, $color = null){
+	$color_string = ($color) ? "style='background: ". urlencode($color)."'" : '';
+	return
+		"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 $width $height' $color_string %3E%3C/svg%3E";
+}
+
+/**
+ * Shorthand for carbon_get_post_meta from Carbon Fields
+ *
+ * @param string $key
+ *
+ * @return mixed
+ */
+function crb_postmeta($key){
+	return carbon_get_post_meta( get_the_ID(), $key );
+}
+
+/**
+ *  Dump and die, but die is optional
+ *
+ * @param mixed $var
+ * @param null $die
+ */
+function dd($var, $die = null){
+	echo "<pre>";
+	var_dump($var);
+	echo "</pre>";
+	if ($die){
+		die;
+	}
 }

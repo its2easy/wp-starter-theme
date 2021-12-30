@@ -1,6 +1,35 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+// https://make.wordpress.org/core/2021/07/01/block-styles-loading-enhancements-in-wordpress-5-8/
+// меньше размер, но больше файлов, возможно стоит попробовать
+//add_filter( 'should_load_separate_core_block_assets', '__return_true' );
+
+/**
+ * Functions which used in theme
+ *
+ */
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+function theme_body_classes( $classes ) {
+	// Adds a class of hfeed to non-singular pages.
+	if ( ! is_singular() ) {
+		$classes[] = 'hfeed';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'theme_body_classes' );
+
+// Removes tag class from the body_class array to avoid Bootstrap markup styling issues.
+add_filter( 'body_class', 'theme_adjust_body_class' );
+function theme_adjust_body_class( $classes ) {
+	foreach ( $classes as $key => $value ) {
+		if ( 'tag' === $value ) {
+			unset( $classes[ $key ] );
+		}
+	}
+	return $classes;
+}
 
 //добавление стандартных классов меню к функции
 // Add standard menu classes to all menus

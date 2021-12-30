@@ -9,6 +9,7 @@ import miniCss from 'mini-css-extract-plugin';
 import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import config from './config.js';
 import commonConfig from './webpack.common.js';
+//import fibers from 'fibers';
 
 let devConfig = {
     mode: 'development',
@@ -59,7 +60,7 @@ let devConfig = {
                         options: {
                             sourceMap: true,
                             sassOptions: {
-                                //fiber: require("fibers"),//passed by default https://github.com/webpack-contrib/sass-loader#string
+                                //fiber: fibers,//passed by default https://github.com/webpack-contrib/sass-loader#string
                             },
                         }
                     }

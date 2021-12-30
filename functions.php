@@ -1,6 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+require get_template_directory() . '/inc/utils.php';// Functions
 require get_template_directory() . '/inc/template-functions.php';// Functions
 require get_template_directory() . '/inc/template-tags.php';// Template blocks
 require get_template_directory() . '/inc/setup.php'; //Theme setup
