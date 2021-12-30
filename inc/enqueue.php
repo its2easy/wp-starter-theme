@@ -12,14 +12,15 @@ function theme_scripts() {
 	$clearJsFileRE = ['/^js\//', '/\.js$/'];
 	$clearCssFileRE = ['/^css\//', '/\.css$/'];
 
+	//gulp version
 	//$cssFile = 'css/style.css';
 	//$jsFile = 'js/main.js';
 	//$themeSystemPath = get_template_directory();
-	//$jsFileTime = filemtime( "$themeSystemPath/$assetsFolder/$jsFile" );
+	////$jsFileTime = filemtime( "$themeSystemPath/$assetsFolder/$jsFile" );
 	//$cssFileTime = filemtime( "$themeSystemPath/$assetsFolder/$cssFile" );
 
 	// 2) Preparation
-	// Proceed webpack manifest
+	//webpack version
 	$manifest = theme_get_webpack_manifest_data(get_template_directory() . '/' . $assetsFolder);
 	$jsQueue = array(); // scripts to be printed on current page
 	$cssQueue = array(); // styles to enqueue
@@ -36,6 +37,7 @@ function theme_scripts() {
 	}
 
 	// 3) Enqueue
+	//webpack version
 	foreach ($cssQueue as $cssFile) {
 		wp_enqueue_style( 'app-' . preg_replace($clearCssFileRE, '', $cssFile) ,
 			"$assetUrlPrefix/$cssFile", array(), null );
@@ -45,8 +47,7 @@ function theme_scripts() {
 			"$assetUrlPrefix/$jsFile", array(), null, true );
 	}
 
-
-	// webpack assets (name based on webpack entry points)
+	// gulp version
 	//wp_enqueue_style( 'app-styles', $assetUrlPrefix . '/' . $cssFile, array(), $cssFileTime);
 	//wp_enqueue_script( 'app-scripts', $assetUrlPrefix . '/' . $jsFile, array(), $jsFileTime, true );
 
@@ -61,8 +62,8 @@ function theme_scripts() {
 	wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), $version, true );
 
 	// 5) Additional info
-	$jsHandle = "theme-" . preg_replace($clearJsFileRE, '', $jsQueue[0]);
-	//$jsHandle = "theme-scripts";
+	$jsHandle = "theme-" . preg_replace($clearJsFileRE, '', $jsQueue[0]); //webpack version
+	//$jsHandle = "theme-scripts"; //gulp version
 	wp_localize_script(
 		$jsHandle, 'ajax_object', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),

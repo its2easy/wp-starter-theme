@@ -1,28 +1,44 @@
 'use strict';
-const yargs = require('yargs'),
-    browserSync = require('browser-sync').create(),
-    gulp = require('gulp'),
-    gulpif = require('gulp-if'),
-    sourcemaps = require('gulp-sourcemaps'),
-    gulpSass = require('gulp-sass')(require('sass')),
-    postcss    = require('gulp-postcss'),
-    autoprefixer = require('autoprefixer'),
-    cssnano = require('cssnano'),
-    packageImporter = require('node-sass-package-importer'),
-    beeper = require('beeper'),
-    rename = require("gulp-rename");
-const config = require('./config');
+import yargs from 'yargs';
+import  { default as browserSync }  from  'browser-sync' ;
+import gulp  from 'gulp';
+import gulpif  from  'gulp-if';
+import sourcemaps from 'gulp-sourcemaps';
+import gulpSass from 'gulp-sass';
+import dartSass from 'sass';
+import postcss from  'gulp-postcss';
+import autoprefixer  from 'autoprefixer';
+import cssnano  from 'cssnano';
+import packageImporter  from 'node-sass-package-importer';
+import beeper from 'beeper'; // v3 doesn't work without type: module
+import rename from "gulp-rename";
+import del from "del";
+
+import config from './config.js';
+const sassPlugin = gulpSass( dartSass );
 
 // Check for --production flag
 const PRODUCTION = !!(yargs.argv.production);
+
+// Delete the "dist" folder
+// This happens every time a build starts
+function clean(done) {
+    del(`${config.resultFolder}/**/*`, {
+        force: true, // dist is outside of cwd (config folder)
+        //dryRun: true,
+    })
+        .then(function(){
+            done();
+        })
+}
 
 //================ CSS
 function sass() {
     return gulp.src(config.scssEntryPoint)
         .pipe(gulpif(!PRODUCTION, sourcemaps.init()))
-        .pipe(gulpSass.sync({
+        .pipe(sassPlugin.sync({
             importer: packageImporter()
-        }).on('error', gulpSass.logError))
+        }).on('error', sassPlugin.logError))
         .on('error', (err) => {
             beeper(1);
         })
@@ -65,6 +81,10 @@ function watch() {
 }
 
 //Public tasks
-const build = gulp.series(sass);
-exports.build = build;
-exports.default = gulp.series(build, server, watch);
+const build = gulp.series(clean, sass);
+
+
+// exports.build = build;
+// exports.default = gulp.series(build, server, watch);
+export default  gulp.series(build, server, watch);
+export { build };

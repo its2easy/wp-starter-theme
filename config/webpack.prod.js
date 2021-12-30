@@ -1,6 +1,10 @@
-const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('webpack-merge');
-const miniCss = require('mini-css-extract-plugin');
-const commonConfig = require('./webpack.common.js');
+// const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('webpack-merge');
+// const miniCss = require('mini-css-extract-plugin');
+// const commonConfig = require('./webpack.common.js');
+
+import { merge, mergeWithCustomize, customizeArray, customizeObject } from 'webpack-merge';
+import miniCss from 'mini-css-extract-plugin';
+import commonConfig from './webpack.common.js';
 
 let prodConfig = {
     mode: 'production',
@@ -48,7 +52,7 @@ let prodConfig = {
                             sourceMap: false,
                             sassOptions: {
                                 outputStyle: 'expanded',
-                                fiber: require("fibers"),
+                                //fiber: require("fibers"), // included by default
                             }
                         }
                     }
@@ -67,4 +71,5 @@ let resultConfig = mergeWithCustomize({
     // })
 })(commonConfig, prodConfig);
 
-module.exports = resultConfig;
+//module.exports = resultConfig;
+export default resultConfig;

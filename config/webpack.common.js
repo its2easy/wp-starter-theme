@@ -1,9 +1,19 @@
-const path = require('path');
-const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+//const path = require('path');
+//const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+//const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+//const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const config = require('./config');
+//const config = require('./config');
+
+import path, { dirname } from "path";
+import { fileURLToPath } from 'url';
+import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
+import config from './config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const webpackConfig = {
     entry: {
@@ -47,4 +57,5 @@ const webpackConfig = {
         new RemoveEmptyScriptsPlugin(),
     ],
 };
-module.exports = webpackConfig;
+//module.exports = webpackConfig;
+export default webpackConfig;

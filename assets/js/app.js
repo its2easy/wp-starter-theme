@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-
+    console.log('static js');
 });//end of $doc ready function
 
 /*

@@ -1,8 +1,14 @@
-const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('webpack-merge');
-const commonConfig = require('./webpack.common.js');
-const miniCss = require('mini-css-extract-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const config = require('./config');
+//const { merge, mergeWithCustomize, customizeArray, customizeObject } = require('webpack-merge');
+//const commonConfig = require('./webpack.common.js');
+//const miniCss = require('mini-css-extract-plugin');
+//const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+//const config = require('./config');
+
+import { merge, mergeWithCustomize, customizeArray, customizeObject } from 'webpack-merge';
+import miniCss from 'mini-css-extract-plugin';
+import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
+import config from './config.js';
+import commonConfig from './webpack.common.js';
 
 let devConfig = {
     mode: 'development',
@@ -53,7 +59,7 @@ let devConfig = {
                         options: {
                             sourceMap: true,
                             sassOptions: {
-                                fiber: require("fibers"),
+                                //fiber: require("fibers"),//passed by default https://github.com/webpack-contrib/sass-loader#string
                             },
                         }
                     }
@@ -70,4 +76,5 @@ let resultConfig = mergeWithCustomize({
     }),
 })(commonConfig, devConfig);
 
-module.exports = resultConfig;
+//module.exports = resultConfig;
+export default resultConfig;

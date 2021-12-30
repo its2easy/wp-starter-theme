@@ -1,6 +1,6 @@
 const root = '../'; // root of the project
 
-module.exports = {
+const config = {
     root: root,
 
     scssEntryPoint: `${root}src/scss/app.scss`,
@@ -17,3 +17,6 @@ module.exports = {
     proxy: 'wp-starter-theme.local',
     port: 3000,
 }
+//module.exports = config;
+export default config;
+
