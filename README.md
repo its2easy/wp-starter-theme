@@ -25,7 +25,7 @@ npm install gulp gulp-cli gulp-if gulp-postcss gulp-sass gulp-sourcemaps yargs n
 ```
 And optionally delete webpack packages:
 ```
-npm uninstall --save-dev babel-loader @babel/core @babel/preset-env browser-sync-webpack-plugin clean-webpack-plugin css-loader mini-css-extract-plugin postcss-loader sass-loader webpack webpack-cli webpack-fix-style-only-entries webpack-merge postcss fibers
+npm uninstall --save-dev babel-loader @babel/core @babel/preset-env browser-sync-webpack-plugin clean-webpack-plugin css-loader mini-css-extract-plugin postcss-loader sass-loader webpack webpack-cli webpack-remove-empty-scripts webpack-merge postcss fibers webpack-bundle-analyzer webpack-manifest-plugin
 ```
 
 ```npm run gulp:start``` - development with livereload and scss

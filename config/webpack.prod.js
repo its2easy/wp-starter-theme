@@ -5,8 +5,15 @@ const commonConfig = require('./webpack.common.js');
 let prodConfig = {
     mode: 'production',
     devtool: false, //'source-map'
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+    },
     plugins: [
-
+        new miniCss({
+            filename: 'css/[name].[contenthash].css',
+        }),
     ],
     module: {
         rules: [
@@ -17,6 +24,8 @@ let prodConfig = {
                     //'style-loader',
                     {
                         loader: 'css-loader',
+                        // importLoaders for .css @import,
+                        // 1 to handle by postcss, 2 to postcss and scss (probably wrong)
                         options: { sourceMap: false, url: false, importLoaders: 1 }
                     },
                     {
@@ -26,14 +35,22 @@ let prodConfig = {
                             postcssOptions: {
                                 plugins: [
                                     [ 'autoprefixer' ],
-                                    [ 'cssnano', {preset: 'default'} ]
+                                    [ 'cssnano', {preset: ['default', {
+                                            svgo: false
+                                        }]} ]
                                 ],
                             },
                         }
                     },
                     {
                         loader: 'sass-loader',
-                        options: { sourceMap: true }
+                        options: {
+                            sourceMap: false,
+                            sassOptions: {
+                                outputStyle: 'expanded',
+                                fiber: require("fibers"),
+                            }
+                        }
                     }
                 ]
             }

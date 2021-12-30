@@ -2,33 +2,69 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 function theme_scripts() {
+	if (is_admin()) return; // Fix wp5.8 new widgets which load frontend assets on backend widgets page
+
+	// 1) Variables
 	$version = wp_get_theme()->get( 'Version' );
 	$theme = get_template();
-	$assets_folder = 'dist';
-	$theme_system_path = get_template_directory();
-	$cssFile = 'css/style.css';
-	$jsFile = 'js/main.js';
+	$assetsFolder = 'dist';
+	$assetUrlPrefix = "/wp-content/themes/$theme/$assetsFolder";
+	$clearJsFileRE = ['/^js\//', '/\.js$/'];
+	$clearCssFileRE = ['/^css\//', '/\.css$/'];
 
-	$assetPrefix = "/wp-content/themes/$theme/$assets_folder/";
-	$jsFileTime = filemtime( "$theme_system_path/$assets_folder/$jsFile" );
-	$cssFileTime = filemtime( "$theme_system_path/$assets_folder/$cssFile" );
+	//$cssFile = 'css/style.css';
+	//$jsFile = 'js/main.js';
+	//$themeSystemPath = get_template_directory();
+	//$jsFileTime = filemtime( "$themeSystemPath/$assetsFolder/$jsFile" );
+	//$cssFileTime = filemtime( "$themeSystemPath/$assetsFolder/$cssFile" );
 
+	// 2) Preparation
+	// Proceed webpack manifest
+	$manifest = theme_get_webpack_manifest_data(get_template_directory() . '/' . $assetsFolder);
+	$jsQueue = array(); // scripts to be printed on current page
+	$cssQueue = array(); // styles to enqueue
+	$entrypoints = array('main', 'style'); // common js and common css
+
+	foreach ($entrypoints as $entrypoint) {
+		if ( !array_key_exists($entrypoint, $manifest)) continue; // only if there are scripts for this entrypoint
+		foreach ($manifest[$entrypoint] as $asset){ // scripts and styles inside entrypoint
+			if (theme_get_filename_ext($asset) == "js") $queue = &$jsQueue;
+			else $queue = &$cssQueue;
+
+			if ( !in_array($asset, $queue) ) {$queue[] = $asset; } // add asset, but skip duplicated
+		}
+	}
+
+	// 3) Enqueue
+	foreach ($cssQueue as $cssFile) {
+		wp_enqueue_style( 'app-' . preg_replace($clearCssFileRE, '', $cssFile) ,
+			"$assetUrlPrefix/$cssFile", array(), null );
+	}
+	foreach ($jsQueue as $jsFile){
+		wp_enqueue_script( "theme-".preg_replace($clearJsFileRE, '', $jsFile),
+			"$assetUrlPrefix/$jsFile", array(), null, true );
+	}
+
+
+	// webpack assets (name based on webpack entry points)
+	//wp_enqueue_style( 'app-styles', $assetUrlPrefix . '/' . $cssFile, array(), $cssFileTime);
+	//wp_enqueue_script( 'app-scripts', $assetUrlPrefix . '/' . $jsFile, array(), $jsFileTime, true );
+
+
+	// 4) Static assets
 	wp_enqueue_style( 'gfonts-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 	wp_deregister_script( 'jquery' );
 	// If there is no jquery, you're gonna have problems
-	wp_enqueue_script( 'jquery', get_template_directory_uri() .
-	                             '/assets/js/vendor/jquery/jquery-3.6.0.min.js',
+	wp_enqueue_script( 'jquery', get_template_directory_uri() . '/assets/js/vendor/jquery/jquery-3.6.0.min.js',
 		array(), $version, false );
-
 	// Old style scripts without compilation
 	wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), $version, true );
 
-	// webpack assets (name based on webpack entry points)
-	wp_enqueue_style( 'app-styles', $assetPrefix . $cssFile, array(), $cssFileTime);
-	wp_enqueue_script( 'app-scripts', $assetPrefix . $jsFile, array(), $jsFileTime, true );
-
+	// 5) Additional info
+	$jsHandle = "theme-" . preg_replace($clearJsFileRE, '', $jsQueue[0]);
+	//$jsHandle = "theme-scripts";
 	wp_localize_script(
-		'app-script', 'ajax_object', array(
+		$jsHandle, 'ajax_object', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 			'nonce' => wp_create_nonce( 'theme_form' ),
 		)

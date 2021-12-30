@@ -266,3 +266,25 @@ if ( ! function_exists('d') ) {
         echo "</pre>";
     }
 }
+
+/**
+ * Return an array with webpack manifest data
+ * @param $path string System path to build folder
+ *
+ * @return array|null
+ */
+function theme_get_webpack_manifest_data($path){
+	$webpack_manifest = file_get_contents("$path/manifest.json");
+	return json_decode($webpack_manifest, true);
+}
+
+/**
+ * Returns file extension from any file path
+ * @param string $filepath
+ *
+ * @return string
+ */
+function theme_get_filename_ext($filepath){
+	$tmp = explode('.', $filepath);
+	return end($tmp);
+}

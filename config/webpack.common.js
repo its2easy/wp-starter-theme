@@ -1,7 +1,8 @@
 const path = require('path');
-const miniCss = require('mini-css-extract-plugin');
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
+const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./config');
 
 const webpackConfig = {
@@ -11,7 +12,7 @@ const webpackConfig = {
     },
     output: {
         path: path.resolve(__dirname, config.resultFolder),
-        filename: 'js/[name].js',
+        filename: 'js/[name].[contenthash].js',
     },
     externals: {
         jquery: 'jQuery'
@@ -28,11 +29,22 @@ const webpackConfig = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(),
-        new FixStyleOnlyEntriesPlugin(),// Remove redundant js files from css entries
-        new miniCss({
-            filename: './css/[name].css',
+        //new BundleAnalyzerPlugin(),
+        new WebpackManifestPlugin({
+            generate: (seed, files, entries) => {
+                for (const [key, value] of Object.entries(entries)) { // remove .map files from manifest file
+                    value.forEach(element => {
+                        if (element.includes(".map"))  {
+                            let index = entries[key].indexOf(element);
+                            if (index > -1) entries[key].splice(index, 1);
+                        }
+                    })
+                }
+                return entries;
+            },
         }),
+        new CleanWebpackPlugin(),
+        new RemoveEmptyScriptsPlugin(),
     ],
 };
 module.exports = webpackConfig;

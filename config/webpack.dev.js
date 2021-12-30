@@ -12,6 +12,10 @@ let devConfig = {
     // eval- doesn't work with mini-css-extract-plugin
     devtool: 'cheap-module-source-map', // eval-source-map, cheap-module-source-map,
     plugins: [
+        new miniCss({
+            filename: 'css/[name].css',
+            //filename: 'css/[name].[contenthash].css', // for tunnel, won't load new styles without reload
+        }),
         new BrowserSyncPlugin(
             {
                 port: config.port,
@@ -24,6 +28,8 @@ let devConfig = {
                     '!**/*.css.map',
                     '!**/*.js.map',
                 ],
+                watchEvents: ["change", "add"],// "add" to reload when js file names are dynamic
+                ghostMode: false, // disable sync between devices
             },
             {
                 reload: false,
@@ -40,11 +46,16 @@ let devConfig = {
                     //'style-loader',
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true, url: false }
+                        options: { sourceMap: true, url: false, importLoaders: 1 }
                     },
                     {
                         loader: 'sass-loader',
-                        options: { sourceMap: true }
+                        options: {
+                            sourceMap: true,
+                            sassOptions: {
+                                fiber: require("fibers"),
+                            },
+                        }
                     }
                 ]
             }
