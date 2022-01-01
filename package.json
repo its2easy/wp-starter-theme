@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack --config config/webpack.prod.js --progress",
     "start": "webpack --config config/webpack.dev.js --watch",
-    "gulp:start": "gulp -f config/gulpfile.esm.js",
-    "gulp:build": "gulp build -f config/gulpfile.esm.js --production"
+    "gulp:start": "gulp -f config/gulpfile.js",
+    "gulp:build": "gulp build -f config/gulpfile.js --production"
   },
   "author": "Dmitriy Kovalev",
   "license": "MIT",

@@ -48,7 +48,8 @@
 
 
 /*========= SWIPER 7 ===================*/
-@import "swiper/scss";// will be resolved in phpstorm 2021.3
+@import "swiper/scss";// will be resolved in phpstorm 2021.3 // webpack version
+//@import "~swiper/swiper.scss"; // gulp verstion
 //@import "swiper/scss/effect-fade";
 
 /*========= Gutenberg styles ===================*/

@@ -16,9 +16,8 @@ import del from "del";
 
 import config from './config.js';
 const sassPlugin = gulpSass( dartSass );
-
-// Check for --production flag
-const PRODUCTION = !!(yargs.argv.production);
+const argv = yargs(process.argv.slice(2)).argv;
+const PRODUCTION = !!(argv.production);
 
 // Delete the "dist" folder
 // This happens every time a build starts

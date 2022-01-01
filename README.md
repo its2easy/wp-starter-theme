@@ -21,7 +21,7 @@ Bootstrap and swiper are already included.
 ### Gulp setup
 To use gulp install dependencies: 
 ```
-npm install gulp gulp-cli gulp-if gulp-postcss gulp-sass gulp-sourcemaps yargs node-sass-package-importer beeper@2 gulp-rename del esm --save-dev
+npm install gulp gulp-cli gulp-if gulp-postcss gulp-sass gulp-sourcemaps yargs node-sass-package-importer beeper gulp-rename del --save-dev
 ```
 And optionally delete webpack packages:
 ```
