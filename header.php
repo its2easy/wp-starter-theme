@@ -11,9 +11,11 @@ $favicon_folder_url = get_template_directory_uri() . '/assets/img/favicons/';
 	<?php wp_head(); ?>
 
 	<?= carbon_get_theme_option( 'crb_head_script' ) ?>
+	<?php //echo get_field( 'theme_head_script', 'option' ) ?>
 </head>
 <body <?php body_class() ?>>
 
+<?php //echo get_field( 'theme_body_start_script', 'option' ) ?>
 <?= carbon_get_theme_option( 'crb_body_start_script' ) ?>
 
     <div class="wrap">

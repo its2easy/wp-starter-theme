@@ -12,11 +12,13 @@ add_filter( 'wp_mail_content_type', 'theme_set_html_content_type' );
 
 // General form handler
 function theme_send_mail(){
+	$emails = carbon_get_theme_option( 'crb_email_recipients' ); // carbon
+	//$emails = get_field('theme_email_recipients', 'option'); // acf
 	$recipients_array = array_map(
 		function($value){
 			return $value['email'];
 		},
-		carbon_get_theme_option( 'crb_email_recipients' ));
+		$emails);
 
 	$fields = array(
 		'name' => array(
