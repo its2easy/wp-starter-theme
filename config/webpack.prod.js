@@ -52,7 +52,7 @@ let prodConfig = {
                             sourceMap: false,
                             sassOptions: {
                                 outputStyle: 'expanded',
-                                //fiber: require("fibers"), // included by default
+
                             }
                         }
                     }

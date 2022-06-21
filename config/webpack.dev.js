@@ -60,7 +60,7 @@ let devConfig = {
                         options: {
                             sourceMap: true,
                             sassOptions: {
-                                //fiber: fibers,//passed by default https://github.com/webpack-contrib/sass-loader#string
+
                             },
                         }
                     }
