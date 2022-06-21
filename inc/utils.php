@@ -65,6 +65,9 @@ function theme_get_filename_ext($filepath){
  * @return array|null
  */
 function theme_get_webpack_manifest_data($path){
-	$webpack_manifest = file_get_contents("$path/manifest.json");
-	return json_decode($webpack_manifest, true);
+	if ( file_exists("$path/manifest.json") ) { // handle first run or no scripts
+		$webpack_manifest = file_get_contents("$path/manifest.json");
+		return json_decode($webpack_manifest, true);
+	}
+	else return array();
 }

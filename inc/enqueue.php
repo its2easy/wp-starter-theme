@@ -62,7 +62,12 @@ function theme_scripts() {
 	wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), $version, true );
 
 	// 5) Additional data
-	$jsHandle = "theme-" . preg_replace($clearJsFileRE, '', $jsQueue[0]); //webpack version
+	if ( !empty($jsQueue) ) {
+		$jsHandle = "theme-" . preg_replace($clearJsFileRE, '', $jsQueue[0]); //webpack version
+	} else {
+		$jsHandle = "theme-scripts";
+	}
+
 	//$jsHandle = "theme-scripts"; //gulp version
 	wp_localize_script(
 		$jsHandle, 'ajax_object', array(
